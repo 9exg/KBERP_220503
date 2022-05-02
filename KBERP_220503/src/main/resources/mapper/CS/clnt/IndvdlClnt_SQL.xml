@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl">
+	<!-- 로그인 -->
+	<select id="icloginCheck" parameterType="hashmap" resultType="hashmap">
+		SELECT CLNT_NUM, ID, PW, CLNT_NAME, PHONE_NUM_1, PHONE_NUM_2, ZIP_CODE, ADRS, DTL_ADRS
+		FROM INDVDL_CLNT
+		WHERE DEL_CHECK = '1'
+		AND ID = #{id}
+		AND PW = #{pw}
+	</select>
+	
+	<insert id="signUp" parameterType="hashmap">
+		INSERT INTO INDVDL_CLNT(CLNT_NUM, ID, PW, CLNT_NAME, PHONE_NUM_1, ADRS, DTL_ADRS)
+		VALUES (INDVDL_CLNT_SEQ.NEXTVAL, #{signup_id}, #{signup_pw}, #{signup_name}, #{phone_num1}, #{adrs}, #{dtlAdrs})
+	</insert>
+	<!-- 아이디 찾기 -->
+	<select id="findId" parameterType="hashmap" resultType="hashmap">
+		SELECT REPLACE(ID,SUBSTR(ID,1,2),'**') AS ID, CLNT_NAME, PHONE_NUM_1
+		FROM INDVDL_CLNT
+		WHERE DEL_CHECK='1'
+        AND CLNT_NAME=#{id}
+        AND PHONE_NUM_1=#{phone_num1}
+	</select>
+	<!-- 회원정보 체크-->
+	<select id="findId2" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(*) AS CNT
+		FROM INDVDL_CLNT
+		WHERE DEL_CHECK='1'
+		AND CLNT_NAME= #{id}
+		AND PHONE_NUM_1=#{phone_num1}
+	</select>
+</mapper>
